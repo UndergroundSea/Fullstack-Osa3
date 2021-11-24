@@ -1,8 +1,11 @@
 const { response } = require('express')
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
+
+app.use(morgan('tiny'))
 
 let persons = [
     {
@@ -62,7 +65,7 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
-    const id = Math.floor(Math.random() * 1000)
+    const id = Math.floor(Math.random() * 1000000)
 
     if (!body.name) {
         return response.status(400).json({
