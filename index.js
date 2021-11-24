@@ -3,9 +3,9 @@ const app = express()
 
 let notes = [
     {
-      id: 1,
-      name: "Arto Hellas",
-      number: "040-123456"
+        id: 1,
+        name: "Arto Hellas",
+        number: "040-123456"
     },
     {
         id: 2,
@@ -22,15 +22,22 @@ let notes = [
         name: "Mary Poppendick",
         number: "39-23-6423122"
     }
-  ]
+]
 
-  app.get('/', (req, res) => {
+app.get('/', (req, res) => {
     res.send('<h1>Notes App</h1><p>Go to api/persons for json data</p>')
-  })
-  
-  app.get('/api/persons', (req, res) => {
+})
+
+app.get('/api/persons', (req, res) => {
     res.json(notes)
-  })
+})
+
+app.get('/info', (req, res) => {
+    const people = notes.length
+    const time = new Date()
+    console.log(time)
+    res.send('<p>Phonebook has info for ' + people + ' people</p>' + '<p>' + time  + '</p>')
+})
 
 const PORT = 3001
 app.listen(PORT)
