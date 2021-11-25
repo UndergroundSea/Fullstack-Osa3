@@ -2,10 +2,13 @@ const { response } = require('express')
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
+const cors = require('cors')
 
 app.use(express.json())
 
 app.use(morgan('tiny'))
+
+app.use(cors())
 
 let persons = [
     {
@@ -88,6 +91,7 @@ app.post('/api/persons', (request, response) => {
 
     persons = persons.concat(person)
     console.log(person)
+    console.log(request.body)
     response.json(person)
 })
 
