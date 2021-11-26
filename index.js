@@ -10,13 +10,6 @@ app.use(express.static('build'))
 app.use(morgan('tiny'))
 app.use(cors())
 
-if (process.argv.length < 3) {
-    console.log('give password as argument')
-    process.exit(1)
-}
-
-const password = process.argv[2]
-
 const url =
     `mongodb+srv://TropicalIsland:Perperper@cluster0.71gwk.mongodb.net/Phonebook-app?retryWrites=true&w=majority`
 
@@ -28,6 +21,7 @@ const personSchema = new mongoose.Schema({
     number: String,
 })
 
+/*{
 personSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
@@ -35,6 +29,7 @@ personSchema.set('toJSON', {
         delete returnedObject.__v
     }
 })
+}*/
 
 const Person = mongoose.model('Person', personSchema)
 
