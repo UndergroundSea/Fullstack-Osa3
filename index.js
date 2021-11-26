@@ -7,10 +7,22 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const Person = require('./models/person')
 
-app.use(express.json())
 app.use(express.static('build'))
+app.use(express.json())
 app.use(morgan('tiny'))
 app.use(cors())
+
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+
+    if (error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformatted id' })
+    }
+
+    next(error)
+}
+
+app.use(errorHandler)
 
 /*{
 const url =
@@ -70,21 +82,23 @@ app.get('/api/persons', (req, res) => {
     })
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
     /*{
     const id = Number(request.params.id)
     const person = persons.find(p => p.id === id)
     }*/
-    Person.findById(request.params.id).then(person => {
-        response.json(person)
-    })
-
-    if (person) {
-        response.json(person)
-    } else {
-        response.status(404).end()
-    }
+    Person.findById(request.params.id)
+        .then(person => {
+            if (person) {
+                response.json(person)
+            } else {
+                response.status(404).end()
+            }
+        })
+        .catch(error => next(error))
 })
+
+
 
 app.get('/info', (req, res) => {
     const people = notes.length
@@ -93,11 +107,16 @@ app.get('/info', (req, res) => {
     res.send('<p>Phonebook has info for ' + people + ' people</p>' + '<p>' + time + '</p>')
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
+    /*{
     const id = Number(req.params.id)
     persons = persons.filter(p => p.id !== id)
-
-    res.status(204).end()
+    }*/
+    Person.findByIdAndRemove(req.params.id)
+        .then(result => {
+            res.status(204).end()
+        })
+        .catch(error => next(error))
 })
 
 app.post('/api/persons', (request, response) => {
