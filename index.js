@@ -18,7 +18,7 @@ if (process.argv.length < 3) {
 const password = process.argv[2]
 
 const url =
-    `mongodb+srv://TropicalIsland:${password}@cluster0.71gwk.mongodb.net/Phonebook-app?retryWrites=true&w=majority`
+    `mongodb+srv://TropicalIsland:<password>@cluster0.71gwk.mongodb.net/Phonebook-app?retryWrites=true&w=majority`
 
 mongoose.connect(url)
 
@@ -26,6 +26,14 @@ const personSchema = new mongoose.Schema({
     id: Number,
     name: String,
     number: String,
+})
+
+personSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
+        delete returnedObject.__v
+    }
 })
 
 const Person = mongoose.model('Person', personSchema)
