@@ -3,13 +3,32 @@ const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
+const mongoose = require('mongoose')
 
 app.use(express.json())
 app.use(express.static('build'))
-
 app.use(morgan('tiny'))
-
 app.use(cors())
+
+if (process.argv.length < 3) {
+    console.log('give password as argument')
+    process.exit(1)
+}
+
+const password = process.argv[2]
+
+const url =
+    `mongodb+srv://TropicalIsland:${password}@cluster0.71gwk.mongodb.net/Phonebook-app?retryWrites=true&w=majority`
+
+mongoose.connect(url)
+
+const personSchema = new mongoose.Schema({
+    id: Number,
+    name: String,
+    number: String,
+})
+
+const Person = mongoose.model('Person', personSchema)
 
 let persons = [
     {
@@ -39,7 +58,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-    res.json(persons)
+    Person.find({}).then(persons => {
+        res.json(persons)
+    })
 })
 
 app.get('/api/persons/:id', (request, response) => {
