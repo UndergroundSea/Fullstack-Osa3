@@ -71,8 +71,13 @@ app.get('/api/persons', (req, res) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
+    /*{
     const id = Number(request.params.id)
     const person = persons.find(p => p.id === id)
+    }*/
+    Person.findById(request.params.id).then(person => {
+        response.json(person)
+    })
 
     if (person) {
         response.json(person)
@@ -109,12 +114,26 @@ app.post('/api/persons', (request, response) => {
             error: 'number missing'
         })
     }
+
+    const person = new Person({
+        id: id,
+        name: body.name,
+        number: body.number,
+    })
+
+    /*{
     if (persons.map(p => p.name).includes(body.name)) {
         return response.status(400).json({
             error: 'name must be unique'
         })
     }
+    }*/
 
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
+
+    /*{
     const person = request.body
     person.id = id
 
@@ -122,6 +141,7 @@ app.post('/api/persons', (request, response) => {
     console.log(person)
     console.log(request.body)
     response.json(person)
+    }*/
 })
 
 const PORT = process.env.PORT
