@@ -18,7 +18,7 @@ if (process.argv.length < 3) {
 const password = process.argv[2]
 
 const url =
-    `mongodb+srv://TropicalIsland:<password>@cluster0.71gwk.mongodb.net/Phonebook-app?retryWrites=true&w=majority`
+    `mongodb+srv://TropicalIsland:Perperper@cluster0.71gwk.mongodb.net/Phonebook-app?retryWrites=true&w=majority`
 
 mongoose.connect(url)
 
