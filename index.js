@@ -1,17 +1,20 @@
+require('dotenv').config()
 const { response } = require('express')
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
+const Person = require('./models/person')
 
 app.use(express.json())
 app.use(express.static('build'))
 app.use(morgan('tiny'))
 app.use(cors())
 
+/*{
 const url =
-    `mongodb+srv://TropicalIsland:Perperper@cluster0.71gwk.mongodb.net/Phonebook-app?retryWrites=true&w=majority`
+    `mongodb+srv://TropicalIsland:<password>@cluster0.71gwk.mongodb.net/Phonebook-app?retryWrites=true&w=majority`
 
 mongoose.connect(url)
 
@@ -21,7 +24,7 @@ const personSchema = new mongoose.Schema({
     number: String,
 })
 
-/*{
+
 personSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
@@ -29,9 +32,10 @@ personSchema.set('toJSON', {
         delete returnedObject.__v
     }
 })
-}*/
+
 
 const Person = mongoose.model('Person', personSchema)
+}*/
 
 let persons = [
     {
@@ -120,6 +124,7 @@ app.post('/api/persons', (request, response) => {
     response.json(person)
 })
 
-const PORT = process.env.PORT || 3001
-app.listen(PORT)
-console.log(`Server running on port ${PORT}`)
+const PORT = process.env.PORT
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+})
